@@ -11,14 +11,14 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.rntensorflow.imagerecognition.RNImageRecognizerModule;
-import com.rntensorflow.objectdetector.RNObjectDetectorModule;
+import com.rntensorflow.objectdetector.RNObjectDetectionModule;
 
 public class RNTensorFlowPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
       return Arrays.<NativeModule>asList(
               new RNImageRecognizerModule(reactContext),
-              new RNObjectDetectorModule(reactContext),
+              new RNObjectDetectionModule(reactContext),
               new RNTensorFlowInferenceModule(reactContext),
               new RNTensorFlowGraphModule(reactContext),
               new RNTensorFlowGraphOperationsModule(reactContext));

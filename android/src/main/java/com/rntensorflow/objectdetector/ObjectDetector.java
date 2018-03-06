@@ -48,7 +48,7 @@ public class ObjectDetector {
                                         final Integer maxResults,
                                         final Double threshold) {
 
-        String inputNameResolved = inputName != null ? inputName : "input";
+        String inputNameResolved = inputName != null ? inputName : "image_tensor";
         String[] outputNames = new String[]{"detection_boxes", "detection_scores", "detection_classes", "num_detections"};
         Integer maxResultsResolved = maxResults != null ? maxResults : MAX_RESULTS;
         Float thresholdResolved = threshold != null ? threshold.floatValue() : THRESHOLD;

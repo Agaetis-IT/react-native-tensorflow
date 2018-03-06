@@ -5,19 +5,19 @@ import com.rntensorflow.imagerecognition.ImageRecognizer;
 
 import java.util.*;
 
-public class RNObjectDetectorModule extends ReactContextBaseJavaModule {
+public class RNObjectDetectionModule extends ReactContextBaseJavaModule {
 
     private Map<String, ObjectDetector> objectDetectors = new HashMap<>();
     private ReactApplicationContext reactContext;
 
-    public RNObjectDetectorModule(ReactApplicationContext reactContext) {
+    public RNObjectDetectionModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
     }
 
     @Override
     public String getName() {
-        return "RNObjectDetector";
+        return "RNObjectDetection";
     }
 
     @Override
@@ -28,7 +28,7 @@ public class RNObjectDetectorModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void initObjectDetector(String id, ReadableMap data, Promise promise) {
+    public void initObjectDetection(String id, ReadableMap data, Promise promise) {
         try {
             String model = data.getString("model");
             String labels = data.getString("labels");
