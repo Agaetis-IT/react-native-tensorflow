@@ -2,7 +2,7 @@
 import { NativeModules, Image } from 'react-native';
 import uuid from 'uuid/v1';
 
-const { RNImageRecognition, RNTensorFlowInference, RNTensorFlowGraph, RNTensorFlowGraphOperations } = NativeModules;
+const { RNImageRecognition, RNObjectDetection, RNTensorFlowInference, RNTensorFlowGraph, RNTensorFlowGraphOperations } = NativeModules;
 
 class TensorFlowOperation {
   constructor(id, opName) {
@@ -132,4 +132,34 @@ class TfImageRecognition {
   }
 }
 
-export { TensorFlow, TfImageRecognition }
+class TfObjectDetection {
+  constructor(data) {
+    this.id = uuid()
+    data['model'] = Image.resolveAssetSource(data['model']) != null
+      ? Image.resolveAssetSource(data['model']).uri
+      : data['model']
+
+    data['labels'] = Image.resolveAssetSource(data['labels']) != null
+      ? Image.resolveAssetSource(data['labels']).uri
+      : data['labels']
+
+    this.init = RNObjectDetection.initObjectDetection(this.id, data)
+  }
+
+  async detect(data) {
+    await this.init
+
+    data['image'] = Image.resolveAssetSource(data['image']) != null
+      ? Image.resolveAssetSource(data['image']).uri
+      : data['image']
+
+    return RNObjectDetection.detect(this.id, data)
+  }
+
+  async close() {
+    await this.init
+    return RNObjectDetection.close(this.id)
+  }
+}
+
+export { TensorFlow, TfImageRecognition, TfObjectDetection }
