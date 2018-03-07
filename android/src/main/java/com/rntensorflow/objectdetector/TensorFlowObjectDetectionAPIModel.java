@@ -17,6 +17,7 @@ package com.rntensorflow.objectdetector;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
+import com.rntensorflow.ResourceManager;
 import org.tensorflow.Graph;
 import org.tensorflow.Operation;
 import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
@@ -40,7 +41,7 @@ public class TensorFlowObjectDetectionAPIModel implements Classifier {
     private int inputSize;
 
     // Pre-allocated buffers.
-    private Vector<String> labels = new Vector<String>();
+    private String[] labels;
     private int[] intValues;
     private byte[] byteValues;
     private float[] outputLocations;
@@ -61,25 +62,17 @@ public class TensorFlowObjectDetectionAPIModel implements Classifier {
      * @param labelFilename The filepath of label file for classes.
      */
     public static Classifier create(
-            final AssetManager assetManager,
+            final ResourceManager resourceManager,
             final String modelFilename,
             final String labelFilename,
             final int inputSize) throws IOException {
         final TensorFlowObjectDetectionAPIModel d = new TensorFlowObjectDetectionAPIModel();
 
-        InputStream labelsInput = null;
-        String actualFilename = labelFilename.split("file:///android_asset/")[1];
-        labelsInput = assetManager.open(actualFilename);
-        BufferedReader br = null;
-        br = new BufferedReader(new InputStreamReader(labelsInput));
-        String line;
-        while ((line = br.readLine()) != null) {
-            d.labels.add(line);
-        }
-        br.close();
-
-
-        d.inferenceInterface = new TensorFlowInferenceInterface(assetManager, modelFilename);
+        d.labels = resourceManager.loadResourceAsString(labelFilename).split("\\r?\\n");
+        byte[] b = resourceManager.loadResource(modelFilename);
+        Graph graph = new Graph();
+        graph.importGraphDef(b);
+        d.inferenceInterface = new TensorFlowInferenceInterface(graph);
 
         final Graph g = d.inferenceInterface.graph();
 
@@ -171,7 +164,7 @@ public class TensorFlowObjectDetectionAPIModel implements Classifier {
                             outputLocations[4 * i + 3] * inputSize,
                             outputLocations[4 * i + 2] * inputSize);
             pq.add(
-                    new Recognition("" + i, labels.get((int) outputClasses[i]), outputScores[i], detection));
+                    new Recognition("" + i, labels[(int) outputClasses[i]], outputScores[i], detection));
         }
 
         final ArrayList<Recognition> recognitions = new ArrayList<Recognition>();

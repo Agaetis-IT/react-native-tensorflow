@@ -21,9 +21,10 @@ public class ObjectDetector {
     }
 
     public static ObjectDetector create(ReactContext reactContext, String modelPath, String labelPath) throws Exception {
+        ResourceManager resourceManager = new ResourceManager(reactContext);
         Classifier detector = TensorFlowObjectDetectionAPIModel.create(
-                reactContext.getAssets(), modelPath, labelPath, INPUT_SIZE);
-        return new ObjectDetector(new ResourceManager(reactContext), detector);
+                resourceManager, modelPath, labelPath, INPUT_SIZE);
+        return new ObjectDetector(resourceManager, detector);
     }
 
     public WritableArray detect(String image) {
