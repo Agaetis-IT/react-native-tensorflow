@@ -29,7 +29,7 @@ public class RNObjectDetectionModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void initObjectDetector(String id, ReadableMap data, Promise promise) {
+    public void initObjectDetection(String id, ReadableMap data, Promise promise) {
         try {
             String model = data.getString("model");
             String labels = data.getString("labels");
