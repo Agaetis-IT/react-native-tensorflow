@@ -32,8 +32,10 @@ public class RNObjectDetectionModule extends ReactContextBaseJavaModule {
         try {
             String model = data.getString("model");
             String labels = data.getString("labels");
+            Integer imageMean = data.hasKey("imageMean") ? data.getInt("imageMean") : null;
+            Double imageStd = data.hasKey("imageStd") ? data.getDouble("imageStd") : null;
 
-            ObjectDetector objectDetector = ObjectDetector.init(reactContext, model, labels);
+            ObjectDetector objectDetector = ObjectDetector.init(reactContext, model, labels, imageMean, imageStd);
             objectDetectors.put(id, objectDetector);
             promise.resolve(true);
         } catch (Exception e) {

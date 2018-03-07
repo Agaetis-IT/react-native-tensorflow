@@ -83,7 +83,7 @@ public class ImageRecognizer {
             floatValues[i * 3 + 1] = (((val >> 8) & 0xFF) - imageMean) / imageStd;
             floatValues[i * 3 + 2] = ((val & 0xFF) - imageMean) / imageStd;
         }
-        Tensor tensor = Tensor.create(new long[]{1, inputSizeResolved, inputSizeResolved, 3}, FloatBuffer.wrap(floatValues));
+        Tensor<Float> tensor = Tensor.create(new long[]{1, inputSizeResolved, inputSizeResolved, 3}, FloatBuffer.wrap(floatValues));
         inference.feed(inputNameResolved, tensor);
         inference.run(new String[] {outputNameResolved}, false);
         ReadableArray outputs = inference.fetch(outputNameResolved);

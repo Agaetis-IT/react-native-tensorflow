@@ -55,7 +55,7 @@ public class RNTensorflowInference {
         return new TfContext(session, runner, graph);
     }
 
-    public void feed(String inputName, Tensor tensor) {
+    public void feed(String inputName, Tensor<?> tensor) {
         tfContext.runner.feed(inputName, tensor);
     }
 
@@ -64,7 +64,7 @@ public class RNTensorflowInference {
             for (String outputName : outputNames) {
                 tfContext.runner.fetch(outputName);
             }
-            List<Tensor> tensors = tfContext.runner.run();
+            List<Tensor<?>> tensors = tfContext.runner.run();
 
             tfContext.outputTensors.clear();
             for (int i = 0; i < outputNames.length; i++) {
@@ -126,7 +126,7 @@ public class RNTensorflowInference {
         final Session session;
         Session.Runner runner;
         final Graph graph;
-        private final Map<String, Tensor> outputTensors;
+        private final Map<String, Tensor<?>> outputTensors;
 
         TfContext(Session session, Session.Runner runner, Graph graph) {
             this.session = session;

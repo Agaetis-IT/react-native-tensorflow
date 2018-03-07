@@ -123,6 +123,9 @@ class TfImageRecognition {
       ? Image.resolveAssetSource(data['image']).uri
       : data['image']
 
+    console.tron.log(this.id)
+    console.tron.log(data)
+
     return RNImageRecognition.recognize(this.id, data)
   }
 
@@ -152,6 +155,9 @@ class TfObjectDetection {
     data['image'] = Image.resolveAssetSource(data['image']) != null
       ? Image.resolveAssetSource(data['image']).uri
       : data['image']
+
+    console.tron.log(this.id)
+    console.tron.log(data)
 
     return RNObjectDetection.detect(this.id, data)
   }
