@@ -3,7 +3,8 @@ package com.rntensorflow.objectdetector;
 import com.facebook.react.bridge.*;
 import com.rntensorflow.imagerecognition.ImageRecognizer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RNObjectDetectionModule extends ReactContextBaseJavaModule {
 
@@ -28,14 +29,11 @@ public class RNObjectDetectionModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void initObjectDetection(String id, ReadableMap data, Promise promise) {
+    public void initObjectDetector(String id, ReadableMap data, Promise promise) {
         try {
             String model = data.getString("model");
             String labels = data.getString("labels");
-            Integer imageMean = data.hasKey("imageMean") ? data.getInt("imageMean") : null;
-            Double imageStd = data.hasKey("imageStd") ? data.getDouble("imageStd") : null;
-
-            ObjectDetector objectDetector = ObjectDetector.init(reactContext, model, labels, imageMean, imageStd);
+            ObjectDetector objectDetector = ObjectDetector.create(reactContext, model, labels);
             objectDetectors.put(id, objectDetector);
             promise.resolve(true);
         } catch (Exception e) {
@@ -47,13 +45,9 @@ public class RNObjectDetectionModule extends ReactContextBaseJavaModule {
     public void detect(String id, ReadableMap data, Promise promise) {
         try {
             String image = data.getString("image");
-            String inputName = data.hasKey("inputName") ? data.getString("inputName") : null;
-            Integer inputSize = data.hasKey("inputSize") ? data.getInt("inputSize") : null;
-            Integer maxResults = data.hasKey("maxResults") ? data.getInt("maxResults") : null;
-            Double threshold = data.hasKey("threshold") ? data.getDouble("threshold") : null;
 
-            ObjectDetector imageRecognizer = objectDetectors.get(id);
-            WritableArray result = imageRecognizer.detect(image, inputName, inputSize, maxResults, threshold);
+            ObjectDetector objectDetector = objectDetectors.get(id);
+            WritableArray result = objectDetector.detect(image);
             promise.resolve(result);
         } catch (Exception e) {
             promise.reject(e);
